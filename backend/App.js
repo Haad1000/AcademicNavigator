@@ -87,7 +87,7 @@ app.post('/login', (req, res) => {
   const { usernameOrEmail, password } = req.body;
 
   // Query to check if the username or email exists in the database and retrieve user data
-  const query = 'SELECT id, username, email, password FROM users WHERE username = ? OR email = ?';
+  const query = 'SELECT user_id, username, email, password FROM users WHERE username = ? OR email = ?';
   connection.query(query, [usernameOrEmail, usernameOrEmail], (error, results) => {
     if (error) {
       console.error('Error querying database: ' + error.stack);
@@ -105,7 +105,81 @@ app.post('/login', (req, res) => {
       return res.status(401).json({ error: 'Incorrect password' });
     }
 
-    res.json({ message: 'Login successful', userId: user.id });
+    res.json({user_id: user.user_id });
 
+  });
+});
+
+// Create a category
+app.post('/addcategories', (req, res) => {
+  const { category_name } = req.body;
+
+  // Check if the category name is provided
+  if (!category_name) {
+    return res.status(400).json({ error: 'Category name is required' });
+  }
+
+  // Insert the new category into the database
+  connection.query('INSERT INTO categories (category_name) VALUES (?)', [category_name], (error, results) => {
+    if (error) {
+      console.error('Error creating category: ' + error.stack);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    res.status(201).json({ message: 'Category created successfully', category_id: results.insertId });
+  });
+});
+
+// Get a category by its ID
+app.post('/getcategories/id', (req, res) => {
+  const categoryId = req.body.category_id;
+
+  connection.query('SELECT * FROM categories WHERE category_id = ?', [categoryId], (error, results) => {
+    if (error) {
+      console.error('Error fetching category: ' + error.stack);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Category not found' });
+    }
+
+    res.json(results[0]);
+  });
+});
+
+// Get a category by its name
+app.post('/getcategories/name', (req, res) => {
+  const categoryName = req.body.category_name;
+
+  connection.query('SELECT * FROM categories WHERE category_name = ?', [categoryName], (error, results) => {
+    if (error) {
+      console.error('Error fetching category: ' + error.stack);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Category not found' });
+    }
+
+    res.json(results[0]);
+  });
+});
+
+// Delete a category by its ID
+app.delete('/deletecategories/:categoryId', (req, res) => {
+  const categoryId = req.params.categoryId;
+
+  connection.query('DELETE FROM categories WHERE category_id = ?', [categoryId], (error, results) => {
+    if (error) {
+      console.error('Error deleting category: ' + error.stack);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ error: 'Category not found' });
+    }
+
+    res.json({ message: 'Category deleted successfully' });
   });
 });
