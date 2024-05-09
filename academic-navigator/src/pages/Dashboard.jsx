@@ -9,8 +9,32 @@ import {
   ecomPieChartData,
 } from "../data/dummy";
 import { useStateContext } from "../contexts/ContextProvider";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const userID = localStorage.getItem("user_Id");
+  const delUrl = `http://127.0.0.1:4000/users/delete/${userID}`;
+
+  const handleDeleteUser = async () => {
+    if (!userID) {
+      console.warn("No user ID found. Cannot delete.");
+      return;
+    }
+
+    try {
+      const response = await axios.delete(delUrl); // Send Delete request
+      if (response.status === 200) {
+        console.log("User deleted successfully.");
+        navigate("/login"); // Navigate to the login page upon success
+      } else {
+        console.error("Failed to delete user:", response.status);
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
 
   return (
     <div className="mt-12">
@@ -34,16 +58,19 @@ const Dashboard = () => {
         </div>
         <div className="flex m-3 flex-wrap justify-center gap-1 items-center">
           {earningData.map((item) => (
-            <div key={item.title} className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56 p-4 pt-9 rounded-2xl">
-              <button type="button"
-              style={{ color: item.iconColor, backgroundColor: item.iconBg}}
-              className="text-2xl opacity-0.9 rounded-full p-4 hover:drop-shadow-xl">
+            <div
+              key={item.title}
+              className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56 p-4 pt-9 rounded-2xl"
+            >
+              <button
+                type="button"
+                style={{ color: item.iconColor, backgroundColor: item.iconBg }}
+                className="text-2xl opacity-0.9 rounded-full p-4 hover:drop-shadow-xl"
+              >
                 {item.icon}
               </button>
               <p className="mt-3">
-                <span className="text-lg font-semibold">
-                  {item.amount}
-                </span>
+                <span className="text-lg font-semibold">{item.amount}</span>
                 <span className={`text-sm text-${item.pcColor} ml-2`}>
                   {item.percentage}
                 </span>
@@ -58,6 +85,14 @@ const Dashboard = () => {
         <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg m-3 p-4 rounded-2xl md:w-780">
           <div className="flex justify-between">
             <p className="font-semibold text-xl">Revenue Updates</p>
+          </div>
+          <div>
+            <button
+              onClick={handleDeleteUser}
+              className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
+            >
+              Delete Account
+            </button>
           </div>
         </div>
       </div>
