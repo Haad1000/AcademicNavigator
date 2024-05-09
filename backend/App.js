@@ -448,3 +448,47 @@ app.delete('/todos/delete/:Id', (req, res) => {
 //   });
 // });
 
+// Assuming you have initialized your Express app and set up your routes and database connection
+
+// Route to change the status of a todo
+app.put('/todos/:Id/status', (req, res) => {
+  const { Id } = req.params;
+  const {Status } = req.body;
+
+  // Check if the todo exists
+  connection.query('SELECT * FROM todos WHERE Id = ?', [Id], (error, results) => {
+    if (error) {
+      console.error('Error checking todo existence:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    if (results.length === 0) {
+      // Todo not found
+      return res.status(404).json({ error: 'Todo not found' });
+    }
+
+    // Todo exists, update its status
+    let statusText;
+    switch (Status) {
+      case 1:
+        statusText = 'Open';
+        break;
+      case 2:
+        statusText = 'InProgress';
+        break;
+      case 3:
+        statusText = 'Close';
+        break;
+      default:
+        return res.status(400).json({ error: 'Invalid status value' });
+    }
+
+    connection.query('UPDATE todos SET Status = ? WHERE Id = ?', [statusText, Id], (error, results) => {
+      if (error) {
+        console.error('Error updating todo status:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+      }
+      res.status(200).json({ message: 'Todo status updated successfully' });
+    });
+  });
+});
