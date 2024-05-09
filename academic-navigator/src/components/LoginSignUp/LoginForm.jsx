@@ -2,28 +2,50 @@ import React, { useState } from "react";
 import "./LoginForm.css";
 import { FaUser, FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useStateContext } from "../../contexts/ContextProvider"; // Assuming you have a context provider for state management
+import { useStateContext } from "../../contexts/ContextProvider";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { setUserAuthenticated } = useStateContext(); // Context for handling authentication state
+  const { setUserId } = useStateContext();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // This is where you would add your login logic, e.g., API call to authenticate
-    if (username === "test" && password === "password") {
-      setUserAuthenticated(true); // Set user as authenticated
-      navigate("/dashboard"); // Redirect to dashboard on successful login
-    } else {
-      alert("Invalid username or password");
+
+    try {
+      const response = await fetch("http://127.0.0.1:4000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          usernameOrEmail: username,
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.user_id) {
+        // Successful login
+        setUserId(data.user_id);
+        navigate("/dashboard"); // Redirect to the dashboard
+      } else if (data.error) {
+        // Error response from the server
+        setError(data.error);
+      } else {
+        setError("Unexpected error occurred.");
+      }
+    } catch (e) {
+      setError("An error occurred while trying to log in."); // Handle unexpected errors
     }
   };
 
   const handleRegisterClick = (e) => {
     e.preventDefault();
-    navigate("/signup"); // Redirect to signup
+    navigate("/signup"); // Redirect to the signup page
   };
 
   return (
@@ -33,13 +55,19 @@ const LoginForm = () => {
         <form onSubmit={handleLogin}>
           <h1>Login</h1>
 
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )}
+
           <div className="input-box">
             <input
               type="text"
-              placeholder="Username"
+              placeholder="Username or Email"
+              required
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              required
             />
             <FaUser className="icon" />
           </div>
@@ -48,9 +76,9 @@ const LoginForm = () => {
             <input
               type="password"
               placeholder="Password"
+              required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
             />
             <FaLock className="icon" />
           </div>
