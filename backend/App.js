@@ -534,7 +534,7 @@ app.post('/events/add/:user_id', (req, res) => {
 
   // Insert the event into the database
   const query = 'INSERT INTO events (user_id, Subject, Location, StartTime, EndTime) VALUES (?, ?, ?, ?, ?)';
-  connection.query(query, [userId, eventData.subject, eventData.location, eventData.start_time, eventData.end_time], (error, results) => {
+  connection.query(query, [userId, eventData.Subject, eventData.Location, eventData.StartTime, eventData.EndTime], (error, results) => {
     if (error) {
       console.error('Error adding event:', error);
       return res.status(500).json({ error: 'Internal server error' });
