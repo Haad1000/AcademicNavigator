@@ -141,6 +141,25 @@ app.post("/login", (req, res) => {
   );
 });
 
+// Route to delete a user by user_id
+app.delete('/users/delete/:user_id', (req, res) => {
+  const user_id = req.params.user_id;
+
+  // Delete the user from the database
+  const query = 'DELETE FROM users WHERE user_id = ?';
+  connection.query(query, [user_id], (error, results) => {
+    if (error) {
+      console.error('Error deleting user:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    if (results.affectedRows === 0) {
+      // No user found with the provided user_id
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.status(200).json({ message: 'User deleted successfully' });
+  });
+});
+
 // Create a category
 // app.post("/addcategories", (req, res) => {
 //   const { category_name } = req.body;
