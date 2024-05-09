@@ -39,7 +39,7 @@ const Calendar = () => {
 
   const fetchCalendarData = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:4000/calendar/events');
+      const response = await axios.get(`http://127.0.0.1:4000/events/${userID}`);
       setScheduleData(response.data);
     } catch (error) {
       console.error('Error fetching calendar data:', error);
@@ -50,12 +50,17 @@ const Calendar = () => {
     fetchCalendarData(); // Fetch calendar data when the component mounts
   }, []);
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewEvent((prev) => ({ ...prev, [name]: value }));
+  };
+
   const addNewEvent = async (e) => {
     e.preventDefault();
 
     try {
       const response = await axios.post(
-        'http://127.0.0.1:4000/calendar/events',
+        `http://127.0.0.1:4000/events/add/${userID}`,
         newEvent // POST request data
       );
 
