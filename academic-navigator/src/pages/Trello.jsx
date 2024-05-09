@@ -34,7 +34,8 @@ const kanbanGrid = [
 
 const Trello = () => {
   const [kanbanData, setKanbanData] = useState([]);
-  const [taskIdToDelete, setTaskIdToDelete] = useState(null);
+  const [taskId, settaskId] = useState(null);
+  const [newStatus, setNewStatus] = useState(null);
   const userID = localStorage.getItem("user_Id");
 
   const fetchKanbanData = async () => {
@@ -102,6 +103,33 @@ const Trello = () => {
       console.error("Error deleting task:", error);
     }
   };
+
+  const updateTaskStatus = async (taskId, status) => {
+    if (status === "Open") {
+      status = 1;
+    }
+    else if (status === "InProgress") {
+      status = 2;
+    }
+    else if (status === "Close") {
+      status = 3;
+    }
+    try {
+      const response = await axios.put(
+        `http://127.0.0.1:4000/todos/${taskId}/status`,
+        { Status: status } // New status to update
+      );
+
+      if (response.status === 200) {
+        console.log("Status updated successfully.");
+        fetchKanbanData(); // Re-fetch to reflect changes
+      } else {
+        console.error("Failed to update status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error updating task status:", error);
+    }
+  };
   
 
   return (
@@ -160,15 +188,28 @@ const Trello = () => {
         removeUrl="http://127.0.0.1:4000/todos/delete"      
         dialogOpen={(e) => {
           if (e.data && e.data.hasOwnProperty("Id")) {
-            const taskId = e.data.Id;
-            console.log("Task ID when dialog opens:", taskId);
-            setTaskIdToDelete(taskId); // Store the task ID in state
+            console.log("Task ID when dialog opens:", e.data.Id);
+            console.log("Task Status when dialog opens:", e.data.Status);
+            settaskId(e.data.Id); // Store the task ID in state
+            setNewStatus(e.data.Status)
           }
         }}
         actionComplete={(e) => {
-          if (e.requestType === "cardRemoved" && taskIdToDelete) {
-            deleteTask(taskIdToDelete); // Use the stored task ID for deletion
+          if (e.requestType === "cardRemoved" && taskId) {
+            deleteTask(taskId); // Use the stored task ID for deletion
           }
+        }}
+        dialogClose={(e) => {
+          setNewStatus(e.data.Status);
+          updateTaskStatus(taskId, e.data.Status);
+          console.log("Status should be updated");
+          console.log("e.data Status = ", newStatus);
+          console.log("newStatus = ", e.data.Status);
+          // if (taskId && newStatus !== null) {
+          //   console.log("What is the Status here at close:", e.data.Status);
+          //   console.log("What is the newStatus here at close:", newStatus)
+          //   updateTaskStatus(taskId, newStatus); // Update status on dialog close
+          // }
         }}
       >
         <ColumnsDirective>

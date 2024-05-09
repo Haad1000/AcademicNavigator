@@ -479,10 +479,6 @@ export const links = [
     title: 'Pages',
     links: [
       {
-        name: 'profile',
-        icon: <RiContactsLine />,
-      },
-      {
         name: 'creators',
         icon: <IoMdContacts />,
       },
