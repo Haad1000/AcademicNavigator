@@ -3,35 +3,46 @@ import "./LoginForm.css";
 import { FaUser, FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../../contexts/ContextProvider";
+import axios from 'axios';
 
 const LoginForm = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [usernameOrEmail, setUsernameOrEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const [userId, setUserId] = useState(null);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError(null); // Reset error state
 
-    const responce = await fetch('http://127.0.0.1:4000/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({ username, password })
-    });
-    const data = await responce.json();
-    if (responce.ok) {
-      console.log(responce)
+    try {
+      const response = await axios.post('http://127.0.0.1:4000/login', {
+        usernameOrEmail,
+        password,
+      });
+      // If successful, get the user_id from the response
+      setUserId(response.data.user_id);
+    } catch (error) {
+      setError('Invalid login credentials');
     }
   };
 
+  if (userId) {
+    console.log(userId);
+  }
+
   const handleRegisterClick = (e) => {
     e.preventDefault();
-    navigate("/signup"); // Redirect to the signup page
-  };
+    navigate('/signup');
+  }
+
 
   return (
     <>
       <div className="background" />
       <div className="wrapper">
+      {error && <div style={{ color: 'red' }}>{error}</div>}
         <form onSubmit={handleLogin}>
           <h1>Login</h1>
 
@@ -40,8 +51,8 @@ const LoginForm = () => {
               type="text"
               placeholder="Username or Email"
               required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={usernameOrEmail}
+              onChange={(e) => setUsernameOrEmail(e.target.value)}
             />
             <FaUser className="icon" />
           </div>
@@ -62,7 +73,7 @@ const LoginForm = () => {
           <div className="register-link">
             <p>
               Don't have an account?{" "}
-              <a href="#" onClick={handleRegisterClick}>
+              <a onClick={handleRegisterClick}>
                 Register
               </a>
             </p>
