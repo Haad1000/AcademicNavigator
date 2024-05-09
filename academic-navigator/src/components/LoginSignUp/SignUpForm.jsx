@@ -2,24 +2,34 @@ import React, { useState } from "react";
 import "./SignUpForm.css";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 const SignUpForm = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const navigate = useNavigate();
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
+    setError(null); // Reset error state
+    setSuccess(null);
 
-    // This is where you would add your signup logic, e.g., API call to create a new user.
-    // For demonstration purposes, we'll assume a successful signup when all fields are filled.
-    if (username && email && password) {
-      console.log("User signed up:", { username, email, password });
-      alert("Signup successful!");
-      navigate("/login"); // Redirect to login page after successful signup
-    } else {
-      alert("Please fill in all fields.");
+    try {
+      const response = await axios.post('http://127.0.0.1:4000/signup', {
+        username,
+        email,
+        password,
+      });
+
+      setSuccess('User created successfully');
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000); // Redirect to login after 2 seconds
+    } catch (error) {
+      setError('Failed to create user. Please try again.');
     }
   };
 

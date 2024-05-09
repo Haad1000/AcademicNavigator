@@ -23,6 +23,8 @@ const LoginForm = () => {
       });
       // If successful, get the user_id from the response
       setUserId(response.data.user_id);
+      localStorage.setItem('user_Id', response.data.user_id);
+      navigate('/dashboard')
     } catch (error) {
       setError('Invalid login credentials');
     }
