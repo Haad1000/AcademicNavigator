@@ -511,3 +511,34 @@ app.put('/todos/:Id/status', (req, res) => {
     });
   });
 });
+
+// GET request to fetch all events for a user
+app.get('/events/:user_id', (req, res) => {
+  const userId = req.params.user_id;
+
+  // Query to fetch events for the specified user
+  const query = 'SELECT * FROM events WHERE user_id = ?';
+  connection.query(query, [userId], (error, results) => {
+    if (error) {
+      console.error('Error fetching events:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    res.status(200).json(results); // Send events data as JSON response
+  });
+});
+
+// POST request to add an event
+app.post('/events/add/:user_id', (req, res) => {
+  const userId = req.params.user_id;
+  const eventData = req.body;
+
+  // Insert the event into the database
+  const query = 'INSERT INTO events (user_id, Subject, Location, StartTime, EndTime) VALUES (?, ?, ?, ?, ?)';
+  connection.query(query, [userId, eventData.subject, eventData.location, eventData.start_time, eventData.end_time], (error, results) => {
+    if (error) {
+      console.error('Error adding event:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    res.status(201).json({ message: 'Event added successfully', event_id: results.insertId });
+  });
+});
