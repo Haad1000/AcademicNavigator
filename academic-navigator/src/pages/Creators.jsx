@@ -4,7 +4,6 @@ import { faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
 import profile1 from './creator1.jpg';
 import profile2 from './creator2.jpg';
 import { Header } from '../components';
-
 const Creators = () => {
   return (
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
