@@ -9,13 +9,13 @@ const initialKanbanData = [
     Id: '1',
     Title: 'Task - 1',
     Status: 'Open',
-    Summary: 'Analyze requirements from customer.',
+    description: 'Analyze requirements from customer.',
   },
   {
     Id: '2',
     Title: 'Task - 2',
     Status: 'InProgress',
-    Summary: 'Develop backend services.',
+    description: 'Develop backend services.',
   },
 ];
 
@@ -24,7 +24,7 @@ const Trello = () => {
 
   const [newTask, setNewTask] = useState({
     Title: '',
-    Summary: '',
+    description: '',
   });
 
   const handleInputChange = (e) => {
@@ -46,7 +46,7 @@ const Trello = () => {
     setKanbanData((prev) => [...prev, taskWithId]); // Add to Kanban data
     setNewTask({
       Title: '',
-      Summary: '',
+      description: '',
     }); // Resetting form fields
   };
 
@@ -64,9 +64,9 @@ const Trello = () => {
           required
         />
         <textarea
-          name="Summary"
-          placeholder="Task Summary"
-          value={newTask.Summary}
+          name="description"
+          placeholder="Task description"
+          value={newTask.description}
           onChange={handleInputChange}
           required
         />
@@ -78,7 +78,7 @@ const Trello = () => {
       <KanbanComponent
         id="kanban"
         dataSource={kanbanData}
-        cardSettings={{ contentField: 'Summary', headerField: 'Title' }}
+        cardSettings={{ contentField: 'description', headerField: 'Title' }}
         keyField="Status"
       >
         <ColumnsDirective>

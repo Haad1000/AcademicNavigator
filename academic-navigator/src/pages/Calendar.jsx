@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { ScheduleComponent, Day, Week, WorkWeek, Month, Agenda, Inject, Resize, DragAndDrop } from '@syncfusion/ej2-react-schedule';
-
-// import { scheduleData } from '../data/dummy';
 import { Header } from '../components';
 
 const scheduleData = [
@@ -10,6 +8,9 @@ const scheduleData = [
     Subject: '319 Demo',
     Location: 'Space Center USA',
     StartTime: '2024-05-09T18:30:00.000Z',
+    //2024-05-09T18:30:00.000Z
+    //2024-05-09 T      18:30:00.000Z
+    //YYYY-MM-DD T=time 24 hour clock I left the 000Z as is because I'm too scared to touch it
     EndTime: '2024-05-09T19:00:00.000Z',
   },
   {
