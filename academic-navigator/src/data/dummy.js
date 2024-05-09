@@ -51,12 +51,7 @@ export const kanbanGrid = [
   { headerText: 'In Progress',
     keyField: 'InProgress',
     allowToggle: true },
-
-  { headerText: 'Testing',
-    keyField: 'Testing',
-    allowToggle: true,
-    isExpanded: false },
-
+    
   { headerText: 'Done',
     keyField: 'Close',
     allowToggle: true },
@@ -471,6 +466,20 @@ export const employeesGrid = [
 
 export const links = [
   {
+    title: 'UserLogin',
+    links: [
+      {
+        name: 'login',
+        icon: <FiShoppingBag />,
+      },
+      {
+        name: 'signup',
+        icon: <FiShoppingBag />,
+      },
+    ],
+  },
+
+  {
     title: 'Dashboard',
     links: [
       {
@@ -484,16 +493,12 @@ export const links = [
     title: 'Pages',
     links: [
       {
-        name: 'orders',
-        icon: <AiOutlineShoppingCart />,
-      },
-      {
-        name: 'employees',
-        icon: <IoMdContacts />,
-      },
-      {
-        name: 'customers',
+        name: 'profile',
         icon: <RiContactsLine />,
+      },
+      {
+        name: 'creators',
+        icon: <IoMdContacts />,
       },
     ],
   },
@@ -505,54 +510,8 @@ export const links = [
         icon: <AiOutlineCalendar />,
       },
       {
-        name: 'kanban',
+        name: 'trello',
         icon: <BsKanban />,
-      },
-      {
-        name: 'editor',
-        icon: <FiEdit />,
-      },
-      {
-        name: 'color-picker',
-        icon: <BiColorFill />,
-      },
-    ],
-  },
-  {
-    title: 'Charts',
-    links: [
-      {
-        name: 'line',
-        icon: <AiOutlineStock />,
-      },
-      {
-        name: 'area',
-        icon: <AiOutlineAreaChart />,
-      },
-
-      {
-        name: 'bar',
-        icon: <AiOutlineBarChart />,
-      },
-      {
-        name: 'pie',
-        icon: <FiPieChart />,
-      },
-      {
-        name: 'financial',
-        icon: <RiStockLine />,
-      },
-      {
-        name: 'color-mapping',
-        icon: <BsBarChart />,
-      },
-      {
-        name: 'pyramid',
-        icon: <GiLouvrePyramid />,
-      },
-      {
-        name: 'stacked',
-        icon: <AiOutlineBarChart />,
       },
     ],
   },
@@ -3280,7 +3239,7 @@ export const kanbanData = [
   {
     Id: 'Task 5',
     Title: 'Task - 29005',
-    Status: 'Review',
+    Status: 'InProgress',
     Summary: 'Fix the issues reported by the customer.',
     Type: 'Bug',
     Priority: 'Low',
@@ -3294,7 +3253,7 @@ export const kanbanData = [
   {
     Id: 'Task 6',
     Title: 'Task - 29007',
-    Status: 'Validate',
+    Status: 'InProgress',
     Summary: 'Validate new requirements',
     Type: 'Improvement',
     Priority: 'Low',
@@ -3308,7 +3267,7 @@ export const kanbanData = [
   {
     Id: 'Task 7',
     Title: 'Task - 29009',
-    Status: 'Review',
+    Status: 'InProgress',
     Summary: 'Fix the issues reported in Safari browser.',
     Type: 'Bug',
     Priority: 'Critical',
@@ -3336,7 +3295,7 @@ export const kanbanData = [
   {
     Id: 'Task 9',
     Title: 'Task - 29011',
-    Status: 'Validate',
+    Status: 'InProgress',
     Summary: 'Validate the issues reported by the customer.',
     Type: 'Story',
     Priority: 'High',
@@ -3378,7 +3337,7 @@ export const kanbanData = [
   {
     Id: 'Task 12',
     Title: 'Task - 29017',
-    Status: 'Review',
+    Status: 'Open',
     Summary: 'Fix the issues reported in data binding.',
     Type: 'Story',
     Priority: 'Normal',
@@ -3406,7 +3365,7 @@ export const kanbanData = [
   {
     Id: 'Task 14',
     Title: 'Task - 29019',
-    Status: 'Validate',
+    Status: 'Close',
     Summary: 'Validate databinding issues.',
     Type: 'Story',
     Priority: 'Low',
@@ -3462,7 +3421,7 @@ export const kanbanData = [
   {
     Id: 'Task 18',
     Title: 'Task - 29023',
-    Status: 'Validate',
+    Status: 'InProgress',
     Summary: 'Validate editing issues.',
     Type: 'Story',
     Priority: 'Critical',
@@ -3476,7 +3435,7 @@ export const kanbanData = [
   {
     Id: 'Task 19',
     Title: 'Task - 29024',
-    Status: 'Review',
+    Status: 'Open',
     Summary: 'Test editing functionality.',
     Type: 'Story',
     Priority: 'Normal',
@@ -3504,7 +3463,7 @@ export const kanbanData = [
   {
     Id: 'Task 21',
     Title: 'Task - 29026',
-    Status: 'InProgress',
+    Status: 'Close',
     Summary: 'Improve the performance of the editing functionality.',
     Type: 'Epic',
     Priority: 'High',
@@ -3532,7 +3491,7 @@ export const kanbanData = [
   {
     Id: 'Task 23',
     Title: 'Task - 29029',
-    Status: 'Review',
+    Status: 'InProgress',
     Summary: 'Fix the editing issues reported by the customer.',
     Type: 'Bug',
     Priority: 'Low',
@@ -3546,7 +3505,7 @@ export const kanbanData = [
   {
     Id: 'Task 24',
     Title: 'Task - 29030',
-    Status: 'Testing',
+    Status: 'InProgress',
     Summary: 'Fix the issues reported by the customer.',
     Type: 'Bug',
     Priority: 'Critical',
@@ -3560,7 +3519,7 @@ export const kanbanData = [
   {
     Id: 'Task 25',
     Title: 'Task - 29031',
-    Status: 'Testing',
+    Status: 'InProgress',
     Summary: 'Fix the issues reported in Safari browser.',
     Type: 'Bug',
     Priority: 'Critical',

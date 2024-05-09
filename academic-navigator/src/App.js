@@ -3,7 +3,15 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { FiSettings } from "react-icons/fi";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 
-import { Navbar, Footer, Sidebar, ThemeSettings } from "./components";
+import {
+  Navbar,
+  Footer,
+  Sidebar,
+  ThemeSettings,
+  LoginForm,
+  SignUpForm,
+} from "./components";
+
 import {
   Dashboard,
   Orders,
@@ -21,7 +29,10 @@ import {
   ColorMapping,
   Editor,
   Line,
+  Profile,
+  Creators,
 } from "./pages";
+
 import { useStateContext } from "./contexts/ContextProvider";
 
 import "./App.css";
@@ -34,6 +45,9 @@ const App = () => {
       <BrowserRouter>
         <div className="flex relative dark:bg-main-dark-bg">
           <div className="fixed right-4 bottom-4" style={{ zIndex: "1000" }}>
+            <Routes>
+                <Route></Route>
+            </Routes>
             <TooltipComponent content="Settings" position="Top">
               <button
                 type="button"
@@ -68,19 +82,25 @@ const App = () => {
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/dashboard" element={<Dashboard />} />
 
+                  {/* Login and Signup */}
+                  <Route path="/login" element={<LoginForm />} />
+                  <Route path="/signup" element={<SignUpForm />} />
+
                   {/* Pages (Will most likely remove and delete) */}
-                  <Route path="/orders" element={<Orders />} />
+                  {/* <Route path="/orders" element={<Orders />} />
                   <Route path="/employees" element={<Employees />} />
-                  <Route path="/customers" element={<Customers />} />
+                  <Route path="/customers" element={<Customers />} /> */}
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/creators" element={<Creators />} />
                   {/* <Route path='/profile' element="Profile" /> */}
 
                   {/* Apps */}
-                  <Route path="/trello" element={<Trello />} />
-                  <Route path="/editor" element={<Editor />} />
                   <Route path="/calendar" element={<Calendar />} />
-                  <Route path="/color-picker" element={<ColorPicker />} />
+                  <Route path="/trello" element={<Trello />} />
+                  {/* <Route path="/editor" element={<Editor />} />
+                  <Route path="/color-picker" element={<ColorPicker />} /> */}
 
-                  {/* Charts */}
+                  {/* Charts
                   <Route path="/line" element={<Line />} />
                   <Route path="/area" element={<Area />} />
                   <Route path="/bar" element={<Bar />} />
@@ -88,7 +108,7 @@ const App = () => {
                   <Route path="/financial" element={<Financial />} />
                   <Route path="/color-mapping" element={<ColorMapping />} />
                   <Route path="/pyramid" element={<Pyramid />} />
-                  <Route path="/stacked" element={<Stacked />} />
+                  <Route path="/stacked" element={<Stacked />} /> */}
                 </Routes>
               </div>
             </div>
