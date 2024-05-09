@@ -12,13 +12,7 @@ import {
   SignUpForm,
 } from "./components";
 
-import {
-  Dashboard,
-  Calendar,
-  Profile,
-  Creators,
-  Trello,
-} from "./pages";
+import { Dashboard, Calendar, Profile, Creators, Trello } from "./pages";
 
 import { useStateContext } from "./contexts/ContextProvider";
 
@@ -26,38 +20,49 @@ import "./App.css";
 
 // Layout component
 const Layout = ({ children }) => {
-  const { activeMenu } = useStateContext();
+  const {
+    activeMenu,
+    themeSettings,
+    setThemeSettings,
+    currentColor,
+    currentMode,
+  } = useStateContext();
 
   return (
-    <div className="flex relative dark:bg-main-dark-bg">
-      <div className="fixed right-4 bottom-4" style={{ zIndex: "1000" }}>
-        <TooltipComponent content="Settings" position="Top">
-          <button
-            type="button"
-            className="text-3xl p-3 hover:drop-shadow-xl hover:bg-light-gray text-white"
-            style={{ background: "#612570", borderRadius: "50%" }}
-          >
-            <FiSettings />
-          </button>
-        </TooltipComponent>
-      </div>
-
-      {activeMenu ? (
-        <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white">
-          <Sidebar />
+    <div className={currentMode === 'Dark' ? 'dark' : ''}>
+      <div className="flex relative dark:bg-main-dark-bg">
+        <div className="fixed right-4 bottom-4" style={{ zIndex: "1000" }}>
+          <TooltipComponent content="Settings" position="Top">
+            <button
+              type="button"
+              className="text-3xl p-3 hover:drop-shadow-xl hover:bg-light-gray text-white"
+              onClick={() => setThemeSettings(true)}
+              style={{ background: currentColor, borderRadius: "50%" }}
+            >
+              <FiSettings />
+            </button>
+          </TooltipComponent>
         </div>
-      ) : (
-        <div className="w-0 dark:bg-secondary-dark-bg bg-white">
-          <Sidebar />
-        </div>
-      )}
 
-      <div
-        className={`dark:bg-main-bg bg-main-bg min-h-screen w-full ${
-          activeMenu ? "md:ml-72" : "flex-2"
-        }`}
-      >
-        {children}
+        {activeMenu ? (
+          <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white">
+            <Sidebar />
+          </div>
+        ) : (
+          <div className="w-0 dark:bg-secondary-dark-bg bg-white">
+            <Sidebar />
+          </div>
+        )}
+
+        <div
+          className={`dark:bg-main-bg bg-main-bg min-h-screen w-full ${
+            activeMenu ? "md:ml-72" : "flex-2"
+          }`}
+        >
+          {themeSettings && <ThemeSettings />}
+
+          {children}
+        </div>
       </div>
     </div>
   );
@@ -88,7 +93,6 @@ const ContentWithLayout = () => {
                 <Route path="/dashboard" element={<Dashboard />} />
 
                 {/* Other pages */}
-                <Route path="/profile" element={<Profile />} />
                 <Route path="/creators" element={<Creators />} />
                 <Route path="/calendar" element={<Calendar />} />
                 <Route path="/trello" element={<Trello />} />
