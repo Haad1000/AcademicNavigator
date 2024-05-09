@@ -25,30 +25,26 @@ import axios from "axios";
 
 // Sample initial KanbanGrid data, Will keep this
 const kanbanGrid = [
-  { headerText: 'To Do',
-    keyField: 'Open',
-    allowToggle: true },
+  { headerText: "To Do", keyField: "Open", allowToggle: true },
 
-  { headerText: 'In Progress',
-    keyField: 'InProgress',
-    allowToggle: true },
-    
-  { headerText: 'Done',
-    keyField: 'Close',
-    allowToggle: true },
+  { headerText: "In Progress", keyField: "InProgress", allowToggle: true },
+
+  { headerText: "Done", keyField: "Close", allowToggle: true },
 ];
 
 const Trello = () => {
   const [kanbanData, setKanbanData] = useState([]);
-  const userID = localStorage.getItem('user_Id');
+  const [taskIdToDelete, setTaskIdToDelete] = useState(null);
+  const userID = localStorage.getItem("user_Id");
 
   const fetchKanbanData = async () => {
     try {
-      const response = await axios.get(`http://127.0.0.1:4000/todos/get/${userID}`);
+      const response = await axios.get(
+        `http://127.0.0.1:4000/todos/get/${userID}`
+      );
 
       setKanbanData(response.data);
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error fetching Kanban data: ", error);
     }
   };
@@ -73,7 +69,8 @@ const Trello = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`http://127.0.0.1:4000/todos/add/${userID}`, 
+      const response = await axios.post(
+        `http://127.0.0.1:4000/todos/add/${userID}`,
         {
           Title: newTask.Title,
           description: newTask.description,
@@ -91,6 +88,21 @@ const Trello = () => {
       console.error("Error adding new task:", error);
     }
   };
+
+  const deleteTask = async (taskId) => {
+    try {
+      console.log(taskId);
+      const response = await axios.delete(`http://127.0.0.1:4000/todos/delete/${taskId}`);
+      if (response.status === 200) {
+        fetchKanbanData(); // Re-fetch to ensure synchronization
+      } else {
+        console.error("Failed to delete task:", response.status);
+      }
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };
+  
 
   return (
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
@@ -144,6 +156,20 @@ const Trello = () => {
         dataSource={kanbanData}
         cardSettings={{ contentField: "description", headerField: "Title" }}
         keyField="Status"
+        dialogSettings={{ showDelete: true, }}
+        removeUrl="http://127.0.0.1:4000/todos/delete"      
+        dialogOpen={(e) => {
+          if (e.data && e.data.hasOwnProperty("Id")) {
+            const taskId = e.data.Id;
+            console.log("Task ID when dialog opens:", taskId);
+            setTaskIdToDelete(taskId); // Store the task ID in state
+          }
+        }}
+        actionComplete={(e) => {
+          if (e.requestType === "cardRemoved" && taskIdToDelete) {
+            deleteTask(taskIdToDelete); // Use the stored task ID for deletion
+          }
+        }}
       >
         <ColumnsDirective>
           {kanbanGrid.map((item, index) => (
