@@ -86,6 +86,7 @@ app.post("/signup", (req, res) => {
   // Check if username or email already exist
   checkExistingUser(username, email, (error, exists) => {
     if (error) {
+      console.error("Error querying database: " + error.stack);
       return res.status(500).json({ error: "Internal server error" });
     }
     if (exists) {
@@ -96,6 +97,7 @@ app.post("/signup", (req, res) => {
     // Create user if username and email are unique
     createUser(username, email, password, (error, userId) => {
       if (error) {
+        console.error("Error querying database: " + error.stack);
         return res.status(500).json({ error: "Internal server error" });
       }
       res.status(201).json({ message: "User created successfully", userId });
