@@ -79,6 +79,10 @@ function checkExistingCategoryId(category_id, callback) {
   });
 }
 
+app.get("/", (req, res) => {
+  res.send("Welcome to the Bookstore!");
+});
+
 // Signup
 app.post("/signup", (req, res) => {
   const { username, email, password } = req.body;
