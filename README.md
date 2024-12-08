@@ -44,7 +44,7 @@ Frontend Directory: Holds all React components, CSS styling, utility scripts. It
 Backend Directory: Includes Node.js server setup files, API route definitions (routes directory), middleware for handling requests, and scripts for database interactions.
 
 Structure Diagram:  
-![][image1]
+![][images/image11.png]
 
 Code of project: [https://github.com/Haad1000/AcademicNavigator.git](https://github.com/Haad1000/AcademicNavigator.git)
 
